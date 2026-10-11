@@ -381,6 +381,35 @@ nav { display: flex; gap: 22px; }
   50% { box-shadow: 0 5px 18px rgba(224, 90, 135, 0.6); }
 }
 
+.speaker-svg {
+  width: 20px;
+  height: 20px;
+  stroke: #ffffff;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+
+.audio-control-widget.is-playing .speaker-svg-off {
+  display: none !important;
+}
+
+.audio-control-widget.is-playing .speaker-svg-on {
+  display: block !important;
+}
+
+.audio-control-widget.is-muted .speaker-svg-on,
+.audio-control-widget:not(.is-playing) .speaker-svg-on {
+  display: none !important;
+}
+
+.audio-control-widget.is-muted .speaker-svg-off,
+.audio-control-widget:not(.is-playing) .speaker-svg-off {
+  display: block !important;
+}
+
 /* Collapsible content (wave & track info) */
 .audio-widget-content {
   display: flex;

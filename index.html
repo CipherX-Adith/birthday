@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday, Bestie! 🎉</title>
   <meta name="description" content="A birthday surprise for the best friend ever!">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nunito:ital,wght@0,400;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
@@ -21,7 +20,16 @@
   <!-- Floating Speaker / Audio Control Widget -->
   <button id="btn-audio" class="audio-control-widget widget-show is-playing" type="button" aria-label="Toggle background music" title="Click to silent / turn off music">
     <div class="speaker-icon-wrap" id="disc">
-      <i class="fa-solid fa-volume-high" id="speaker-icon"></i>
+      <svg class="speaker-svg speaker-svg-on" viewBox="0 0 24 24" aria-hidden="true">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+      <svg class="speaker-svg speaker-svg-off" viewBox="0 0 24 24" aria-hidden="true">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="22" y1="9" x2="16" y2="15"></line>
+        <line x1="16" y1="9" x2="22" y2="15"></line>
+      </svg>
     </div>
     <div class="audio-widget-content">
       <div class="audio-wave" id="audio-wave" aria-hidden="true">

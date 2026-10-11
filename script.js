@@ -589,7 +589,6 @@ function initAudio() {
   const audio = document.getElementById("bg-audio");
   if (!btn || !audio) return;
 
-  const icon   = document.getElementById("speaker-icon") || btn.querySelector("i");
   const status = document.getElementById("track-status") || btn.querySelector(".t-status");
   let userSilenced = false;
 
@@ -597,14 +596,12 @@ function initAudio() {
     if (isPlaying) {
       btn.classList.add("is-playing", "audio-playing");
       btn.classList.remove("is-muted");
-      if (icon) icon.className = "fa-solid fa-volume-high";
       if (status) status.textContent = "Music Playing";
       btn.setAttribute("title", "Click to silent / turn off music");
       btn.setAttribute("aria-label", "Music is playing. Click to silent");
     } else {
       btn.classList.remove("is-playing", "audio-playing");
       btn.classList.add("is-muted");
-      if (icon) icon.className = "fa-solid fa-volume-xmark";
       if (status) status.textContent = "Music Silent";
       btn.setAttribute("title", "Click to turn on music");
       btn.setAttribute("aria-label", "Music is silent. Click to turn on");
