@@ -329,6 +329,9 @@ function initLanding() {
         balloonPop  = true;
         arrowFlying = false;
         fireConfettiBurst(by, bx);
+        if (window.playBirthdayAudio) {
+          window.playBirthdayAudio();
+        }
       }
 
       // Arrow left screen — reset
@@ -586,22 +589,96 @@ function initAudio() {
   const audio = document.getElementById("bg-audio");
   if (!btn || !audio) return;
 
-  const disc   = document.getElementById("disc");
-  const status = btn.querySelector(".t-status");
+  const icon   = document.getElementById("speaker-icon") || btn.querySelector("i");
+  const status = document.getElementById("track-status") || btn.querySelector(".t-status");
+  let userSilenced = false;
 
-  btn.addEventListener("click", () => {
-    if (audio.paused) {
-      audio.play();
-      btn.classList.add("is-playing");
-      disc?.classList.add("spinning");
-      if (status) status.textContent = "Playing";
+  function updateUI(isPlaying) {
+    if (isPlaying) {
+      btn.classList.add("is-playing", "audio-playing");
+      btn.classList.remove("is-muted");
+      if (icon) icon.className = "fa-solid fa-volume-high";
+      if (status) status.textContent = "Music Playing";
+      btn.setAttribute("title", "Click to silent / turn off music");
+      btn.setAttribute("aria-label", "Music is playing. Click to silent");
     } else {
-      audio.pause();
-      btn.classList.remove("is-playing");
-      disc?.classList.remove("spinning");
-      if (status) status.textContent = "Paused";
+      btn.classList.remove("is-playing", "audio-playing");
+      btn.classList.add("is-muted");
+      if (icon) icon.className = "fa-solid fa-volume-xmark";
+      if (status) status.textContent = "Music Silent";
+      btn.setAttribute("title", "Click to turn on music");
+      btn.setAttribute("aria-label", "Music is silent. Click to turn on");
+    }
+  }
+
+  function playSound() {
+    audio.muted = false;
+    const promise = audio.play();
+    if (promise !== undefined) {
+      promise
+        .then(() => {
+          if (!userSilenced) updateUI(true);
+        })
+        .catch(err => {
+          // If browser policy defers autoplay until interaction,
+          // keep static visual state as playing unless silenced by user
+          if (!userSilenced) updateUI(true);
+        });
+    }
+  }
+
+  function muteSound() {
+    audio.pause();
+    updateUI(false);
+  }
+
+  // Toggle button click: only gets silent when user clicks the silent button
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    if (!audio.paused && !audio.muted) {
+      userSilenced = true;
+      muteSound();
+    } else {
+      userSilenced = false;
+      playSound();
     }
   });
+
+  audio.addEventListener("play", () => {
+    if (!userSilenced) updateUI(true);
+  });
+  audio.addEventListener("pause", () => {
+    if (userSilenced) updateUI(false);
+  });
+
+  // Default / static state: playing
+  updateUI(true);
+  playSound();
+
+  // Ensure playback starts immediately on any user interaction if browser blocked autoplay
+  const onInteraction = () => {
+    if (!userSilenced && audio.paused) {
+      playSound();
+    }
+  };
+  ["pointerdown", "touchstart", "click", "keydown", "mousemove"].forEach(evt => {
+    window.addEventListener(evt, onInteraction, { passive: true });
+  });
+
+  // Listen for interaction from iframe
+  window.addEventListener("message", ev => {
+    if (ev.data && ev.data.type === "BDY_INTERACTION") {
+      if (!userSilenced && audio.paused) {
+        playSound();
+      }
+    }
+  });
+
+  window.playBirthdayAudio = () => {
+    if (!userSilenced && audio.paused) {
+      playSound();
+    }
+  };
 }
 
 // ==========================================================================

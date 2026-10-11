@@ -14,11 +14,25 @@
 <body>
 
   <!-- Background Music -->
-  <audio id="bg-audio" loop>
-    <!-- Happy Birthday – public domain (Wikimedia Commons) -->
-    <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/3/35/Happy_birthday_to_you.ogg/Happy_birthday_to_you.ogg.mp3" type="audio/mpeg">
-    <source src="https://upload.wikimedia.org/wikipedia/commons/3/35/Happy_birthday_to_you.ogg" type="audio/ogg">
+  <audio id="bg-audio" loop preload="auto" autoplay>
+    <source src="sub_clair-happy-birthday-592177.mp3" type="audio/mpeg">
   </audio>
+
+  <!-- Floating Speaker / Audio Control Widget -->
+  <button id="btn-audio" class="audio-control-widget widget-show is-playing" type="button" aria-label="Toggle background music" title="Click to silent / turn off music">
+    <div class="speaker-icon-wrap" id="disc">
+      <i class="fa-solid fa-volume-high" id="speaker-icon"></i>
+    </div>
+    <div class="audio-widget-content">
+      <div class="audio-wave" id="audio-wave" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="track-info">
+        <span class="track-status t-status" id="track-status">Music Playing</span>
+        <span class="track-name">Happy Birthday 🎂</span>
+      </div>
+    </div>
+  </button>
 
   <!-- Confetti / particle overlay — always on top -->
   <canvas id="particles-canvas"></canvas>

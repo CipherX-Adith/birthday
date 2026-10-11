@@ -50,6 +50,58 @@
     const colors=["#f4bd45","#e86797","#76c9bd","#f29a58","#fff"];
     document.getElementById("blow").addEventListener("click",function(){document.querySelectorAll(".flame").forEach(x=>x.classList.add("out"));this.style.display="none";document.getElementById("wish").classList.add("active");const box=document.getElementById("confetti");for(let i=0;i<130;i++){const bit=document.createElement("i");bit.className="bit";bit.style.left=Math.random()*100+"vw";bit.style.background=colors[i%colors.length];bit.style.setProperty("--x",(Math.random()-.5)*260+"px");bit.style.animationDelay=Math.random()*.45+"s";box.append(bit);setTimeout(()=>bit.remove(),3200)}});
     const secret=document.getElementById("secret");let revealTimer;function closeSecret(){clearTimeout(revealTimer);secret.classList.remove("open","revealing","revealed")}document.getElementById("open-secret").addEventListener("click",()=>{secret.classList.add("open");requestAnimationFrame(()=>secret.classList.add("revealing"));revealTimer=setTimeout(()=>secret.classList.add("revealed"),850)});document.getElementById("close-secret").addEventListener("click",closeSecret);secret.addEventListener("click",e=>{if(e.target===secret)closeSecret()});const starSection=document.querySelector(".star-letter"),sky=document.querySelector(".constellation");for(let i=0;i<42;i++){const star=document.createElement("i");star.style.left=Math.random()*100+"%";star.style.top=Math.random()*100+"%";star.style.setProperty("--s",(Math.random()*3+1)+"px");star.style.setProperty("--dx",(Math.random()-.5)*180+"px");star.style.setProperty("--dy",(Math.random()-.5)*150+"px");star.style.setProperty("--d",(Math.random()*.8)+"s");sky.append(star)}new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){starSection.classList.add("in");}})},{threshold:.32}).observe(starSection);window.addEventListener("load",()=>setTimeout(()=>document.getElementById("loader").classList.add("done"),1300));
+    if (window.self === window.top) {
+      const bAudio = document.createElement("audio");
+      bAudio.id = "bg-audio";
+      bAudio.loop = true;
+      bAudio.preload = "auto";
+      bAudio.src = "sub_clair-happy-birthday-592177.mp3";
+      document.body.appendChild(bAudio);
+      const bBtn = document.createElement("button");
+      bBtn.id = "bestie-audio-btn";
+      bBtn.setAttribute("aria-label", "Toggle background music");
+      bBtn.innerHTML = '<span id="bestie-spk-icon" style="font-size:1.1rem">🔊</span> <span id="bestie-spk-text">Music Playing</span>';
+      bBtn.style.cssText = "position:fixed;top:20px;right:20px;z-index:9999;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border:1.5px solid #e86797;border-radius:50px;padding:8px 16px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:700;color:#63233f;display:flex;align-items:center;gap:8px;box-shadow:0 8px 20px rgba(99,35,63,0.15);transition:transform .2s;";
+      bBtn.onmouseover = () => bBtn.style.transform = "scale(1.05)";
+      bBtn.onmouseout = () => bBtn.style.transform = "scale(1)";
+      document.body.appendChild(bBtn);
+      let bSilenced = false;
+      function updateBUI(playing) {
+        const ic = document.getElementById("bestie-spk-icon");
+        const tx = document.getElementById("bestie-spk-text");
+        if (playing) {
+          if (ic) ic.textContent = "🔊";
+          if (tx) tx.textContent = "Music Playing";
+          bBtn.style.borderColor = "#e86797";
+        } else {
+          if (ic) ic.textContent = "🔇";
+          if (tx) tx.textContent = "Music Silent";
+          bBtn.style.borderColor = "#f8cbd9";
+        }
+      }
+      function bPlay() {
+        bAudio.muted = false;
+        bAudio.play().then(() => { if (!bSilenced) updateBUI(true); }).catch(() => { if (!bSilenced) updateBUI(true); });
+      }
+      bBtn.onclick = () => {
+        if (!bAudio.paused && !bAudio.muted) {
+          bSilenced = true;
+          bAudio.pause();
+          updateBUI(false);
+        } else {
+          bSilenced = false;
+          bPlay();
+        }
+      };
+      bPlay();
+      window.addEventListener("pointerdown", () => {
+        if (!bSilenced && bAudio.paused) bPlay();
+      }, { once: true, passive: true });
+    } else {
+      window.addEventListener("pointerdown", () => {
+        try { window.parent.postMessage({ type: "BDY_INTERACTION" }, "*"); } catch(e){}
+      }, { passive: true });
+    }
   </script>
 </body>
 </html>
